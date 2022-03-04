@@ -10,8 +10,9 @@ namespace bookAPI.Models
         public string Name {get; set;}
         public System.DateTime Create_date {get; set;}
         public int View {get; set; }
+        public int ID_Volume {get; set;}
         public string Text {get; set;}
-        [ForeignKey("ID_Book")]
-        public virtual Book Book {get; set;}
+        [ForeignKey("ID_Volume")]
+        public virtual Volume Volume {get; set;}
     }
 }

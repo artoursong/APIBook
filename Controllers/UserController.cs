@@ -142,7 +142,15 @@ namespace Namespace
             return BadRequest("Invalid");
         }
 
-        //[HttpPut("updateinfo/{id}")]
+        [HttpPut("changepass")]
+        public bool NewPassword(ChangePass changePass) {
+            return userService.NewPassChange(changePass);
+        }
+        
+        [HttpPost("passforgot/{username}")]
+        public bool PassForgot(string username) {
+            return userService.passforgot(username);
+        }
 
     }
 }

@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace bookAPI.Models
 {
@@ -16,6 +12,7 @@ namespace bookAPI.Models
         public string Hoa_si {get; set;}
         public string Image {get; set;}
         public int ID_User {get; set;}
+        public DateTime Create_date {get; set;}
         public string[] Categories {get; set;}
         
     }

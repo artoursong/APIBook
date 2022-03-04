@@ -3,19 +3,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace bookAPI.Models
 {
-    public class Comment
+    public class IsBan
     {
         [Key]
-        public int ID_Comment {get; set;}
+        public int ID_IsBan {get; set;}
         public string Text {get; set;}
-        public int ID_Book {get; set;}
         public int? ID_User {get; set;}
-        public System.DateTime Create_Date {get; set;}
+        public int ID_Comment {get; set;}
 
         [ForeignKey("ID_User")]
         public virtual User user {get; set;}
-        [ForeignKey("ID_Book")]
-        public virtual Book book {get; set;}
+
+        [ForeignKey("ID_Comment")]
+        public virtual Comment comment {get; set;}
 
     }
 }

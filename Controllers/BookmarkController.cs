@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using bookAPI.Models;
+using bookAPI.Service;
 
 namespace Namespace
 {
@@ -10,21 +12,23 @@ namespace Namespace
     [ApiController]
     public class BookmarkController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public readonly BookMarkService bookmarkService;
+
+        public BookmarkController() 
         {
-            return "value";
+            bookmarkService = new BookMarkService();
+        }
+        [HttpPost("getbookmark")]
+        public List<int> Get(Bookmark bookmark)
+        {
+            return bookmarkService.Get(bookmark);
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public List<int> Post(Bookmark bookmark)
         {
+            return bookmarkService.Post(bookmark);
         }
 
         [HttpPut("{id}")]
@@ -32,9 +36,16 @@ namespace Namespace
         {
         }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPost("deletebookmark")]
+        public bool Delete(Bookmark bookmark)
         {
+            return bookmarkService.Delete(bookmark);
+        }
+
+        [HttpGet("{id}")]
+        public List<BookMarkData> Get(int id)
+        {
+            return bookmarkService.GetBookmarkBook(id);
         }
     }
 }

@@ -38,6 +38,8 @@ namespace bookAPI.Models
         public virtual DbSet<Follow> Follows {get; set;}
         public virtual DbSet<Rating> Ratings {get; set;}
         public virtual DbSet<ChitietCategory> ChitietCategories {get; set;}
+        public virtual DbSet<Volume> Volumes {get; set;}
+        public virtual DbSet<IsBan> IsBans {get; set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             OnModelCreatingPartial(modelBuilder);

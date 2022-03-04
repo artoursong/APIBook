@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using bookAPI.Service;
+using bookAPI.Models;
+
 
 namespace Namespace
 {
@@ -10,31 +13,22 @@ namespace Namespace
     [ApiController]
     public class RatingController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        public readonly RatingService ratingService;
 
+        public RatingController() {
+            ratingService = new RatingService();
+        }
+        
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public int Get(int id)
         {
-            return "value";
+            return ratingService.Rate_average(id);
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public bool Post(Rating rating)
         {
-        }
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return ratingService.Post(rating);
         }
     }
 }

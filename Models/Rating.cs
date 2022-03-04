@@ -8,6 +8,8 @@ namespace bookAPI.Models
         [Key]
         public int ID_Rating {get; set;}
         public int Value {get; set;}
+        public int? ID_User {get; set;}
+        public int ID_Book {get; set;}
         [ForeignKey("ID_User")]
         public virtual User User {get; set;}
         [ForeignKey("ID_Book")]

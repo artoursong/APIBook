@@ -54,7 +54,10 @@ namespace bookAPI.Migrations
                     Create_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     View_sum = table.Column<int>(type: "int", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ID_User = table.Column<int>(type: "int", nullable: true)
+                    Tinh_trang = table.Column<bool>(type: "bit", nullable: false),
+                    Follow_sum = table.Column<int>(type: "int", nullable: false),
+                    Update_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ID_User = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,30 +67,7 @@ namespace bookAPI.Migrations
                         column: x => x.ID_User,
                         principalTable: "Users",
                         principalColumn: "ID_User",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Chapters",
-                columns: table => new
-                {
-                    ID_Chapter = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Create_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    View = table.Column<int>(type: "int", nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ID_Book = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Chapters", x => x.ID_Chapter);
-                    table.ForeignKey(
-                        name: "FK_Chapters_Books_ID_Book",
-                        column: x => x.ID_Book,
-                        principalTable: "Books",
-                        principalColumn: "ID_Book",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -123,8 +103,8 @@ namespace bookAPI.Migrations
                     ID_Comment = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ID_User = table.Column<int>(type: "int", nullable: true),
-                    ID_Book = table.Column<int>(type: "int", nullable: true)
+                    ID_Book = table.Column<int>(type: "int", nullable: false),
+                    ID_User = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -134,7 +114,7 @@ namespace bookAPI.Migrations
                         column: x => x.ID_Book,
                         principalTable: "Books",
                         principalColumn: "ID_Book",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Comments_Users_ID_User",
                         column: x => x.ID_User,
@@ -150,7 +130,7 @@ namespace bookAPI.Migrations
                     ID_Follow = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ID_User = table.Column<int>(type: "int", nullable: true),
-                    ID_Book = table.Column<int>(type: "int", nullable: true)
+                    ID_Book = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -160,7 +140,7 @@ namespace bookAPI.Migrations
                         column: x => x.ID_Book,
                         principalTable: "Books",
                         principalColumn: "ID_Book",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Follows_Users_ID_User",
                         column: x => x.ID_User,
@@ -177,7 +157,7 @@ namespace bookAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Value = table.Column<int>(type: "int", nullable: false),
                     ID_User = table.Column<int>(type: "int", nullable: true),
-                    ID_Book = table.Column<int>(type: "int", nullable: true)
+                    ID_Book = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,7 +167,7 @@ namespace bookAPI.Migrations
                         column: x => x.ID_Book,
                         principalTable: "Books",
                         principalColumn: "ID_Book",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Ratings_Users_ID_User",
                         column: x => x.ID_User,
@@ -197,14 +177,85 @@ namespace bookAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Volumes",
+                columns: table => new
+                {
+                    ID_Volume = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ID_Book = table.Column<int>(type: "int", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Volumes", x => x.ID_Volume);
+                    table.ForeignKey(
+                        name: "FK_Volumes_Books_ID_Book",
+                        column: x => x.ID_Book,
+                        principalTable: "Books",
+                        principalColumn: "ID_Book",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IsBans",
+                columns: table => new
+                {
+                    ID_IsBan = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ID_User = table.Column<int>(type: "int", nullable: true),
+                    ID_Comment = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IsBans", x => x.ID_IsBan);
+                    table.ForeignKey(
+                        name: "FK_IsBans_Comments_ID_Comment",
+                        column: x => x.ID_Comment,
+                        principalTable: "Comments",
+                        principalColumn: "ID_Comment",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IsBans_Users_ID_User",
+                        column: x => x.ID_User,
+                        principalTable: "Users",
+                        principalColumn: "ID_User",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Chapters",
+                columns: table => new
+                {
+                    ID_Chapter = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Create_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    View = table.Column<int>(type: "int", nullable: false),
+                    ID_Volume = table.Column<int>(type: "int", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chapters", x => x.ID_Chapter);
+                    table.ForeignKey(
+                        name: "FK_Chapters_Volumes_ID_Volume",
+                        column: x => x.ID_Volume,
+                        principalTable: "Volumes",
+                        principalColumn: "ID_Volume",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Bookmakrs",
                 columns: table => new
                 {
                     ID_Bookmark = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Position = table.Column<int>(type: "int", nullable: false),
-                    ID_User = table.Column<int>(type: "int", nullable: true),
-                    ID_Chapter = table.Column<int>(type: "int", nullable: true)
+                    ID_Chapter = table.Column<int>(type: "int", nullable: false),
+                    ID_User = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -214,7 +265,7 @@ namespace bookAPI.Migrations
                         column: x => x.ID_Chapter,
                         principalTable: "Chapters",
                         principalColumn: "ID_Chapter",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Bookmakrs_Users_ID_User",
                         column: x => x.ID_User,
@@ -239,9 +290,9 @@ namespace bookAPI.Migrations
                 column: "ID_User");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chapters_ID_Book",
+                name: "IX_Chapters_ID_Volume",
                 table: "Chapters",
-                column: "ID_Book");
+                column: "ID_Volume");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChitietCategories_ID_Book",
@@ -274,6 +325,16 @@ namespace bookAPI.Migrations
                 column: "ID_User");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IsBans_ID_Comment",
+                table: "IsBans",
+                column: "ID_Comment");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IsBans_ID_User",
+                table: "IsBans",
+                column: "ID_User");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Ratings_ID_Book",
                 table: "Ratings",
                 column: "ID_Book");
@@ -289,6 +350,11 @@ namespace bookAPI.Migrations
                 column: "Username",
                 unique: true,
                 filter: "[Username] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Volumes_ID_Book",
+                table: "Volumes",
+                column: "ID_Book");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -300,10 +366,10 @@ namespace bookAPI.Migrations
                 name: "ChitietCategories");
 
             migrationBuilder.DropTable(
-                name: "Comments");
+                name: "Follows");
 
             migrationBuilder.DropTable(
-                name: "Follows");
+                name: "IsBans");
 
             migrationBuilder.DropTable(
                 name: "Ratings");
@@ -313,6 +379,12 @@ namespace bookAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "Volumes");
 
             migrationBuilder.DropTable(
                 name: "Books");

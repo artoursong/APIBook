@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using bookAPI.Service;
+using bookAPI.Models;
 
 namespace Namespace
 {
@@ -24,31 +25,33 @@ namespace Namespace
         }
 
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ChapterData Get(int id)
         {
-            return "value";
+            return chapterService.Get(id);
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public List<VolumeData> Post(ChapterData chapterData)
         {
-            
+            return chapterService.Post(chapterData);
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut()]
+        public bool Put(ChapterData chapterData)
         {
+            return chapterService.Put(chapterData);
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public VolumeData Delete(int id)
         {
+            return chapterService.Delete(id);
         }
 
-        [HttpPost("convert")]
-        public List<string> Convert([FromBody] string[] s) 
+        [HttpGet("chapterofvolume/{id}")]
+        public List<Chapter> GetChapters(int id) 
         {
-            return chapterService.ConvertContent(s);
+            return chapterService.GetAllChapterOfVolume(id);
         }
     }
 }

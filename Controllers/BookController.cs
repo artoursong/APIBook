@@ -25,7 +25,7 @@ namespace Namespace
         }
 
         [HttpGet("{id}")]
-        public Book Get(int id)
+        public BookDataResponse Get(int id)
         {
             return bookService.Get(id);
         }
@@ -37,9 +37,9 @@ namespace Namespace
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Book book)
+        public void Put(int id, Book book)
         {
-            Book bookinfo = bookService.Put(id, book);
+            bookService.Put(id, book);
         }
 
         [HttpDelete("{id}")]
@@ -58,6 +58,41 @@ namespace Namespace
         public List<Book> GetAuthor(string auth) 
         {
             return bookService.GetBookByAuthor(auth);
+        }
+
+        [HttpGet("gettop10")]
+        public Gettop gettop()
+        {
+            Gettop top = new Gettop {
+                Top10NoiBat = bookService.GetTop10NoiBat(),
+                Top10TheoDoi = bookService.GetTop10(),
+                NewUpdate = bookService.GetNew()
+            };
+            return top;
+        }
+
+        [HttpGet("bookofuser/{id}")]
+        public List<BookOfUser> GetBooksOfUser(int id) {
+            return bookService.GetBookByIdUser(id);
+        }
+
+        [HttpPost("findby")]
+        public AllBookPage GetByAuthOrCate(BookDataRecive data) {
+            return bookService.GetByAuthorOrCategory(data);
+        }
+        [HttpGet("newbook")]
+        public List<Top10BookData> getnew() {
+            return bookService.GetNew();
+        }
+
+        [HttpGet("findbook/{data}")]
+        public List<BookFind> SearchBook(string data) {
+            return bookService.FindBook(data);
+        }
+
+        [HttpPost("allbookpage")]
+        public AllBookPage getallbook(BookDataRecive data) {
+            return bookService.AllBook(data);
         }
     }
 }

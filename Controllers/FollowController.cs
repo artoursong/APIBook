@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using bookAPI.Models;
+using bookAPI.Service;
 
 namespace Namespace
 {
@@ -10,31 +12,37 @@ namespace Namespace
     [ApiController]
     public class FollowController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
+
+        public readonly FollowService followService;
+
+        public FollowController() {
+            followService = new FollowService();
         }
 
+
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public List<int> Get(int id)
         {
-            return "value";
+            return followService.GetFollows(id);
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public List<int> Post(Follow follow)
         {
+            return followService.Post(follow);
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public bool Delete(int id)
         {
+            return followService.Delete(id);
+        }
+
+        [HttpGet("allfollow/{id}")]
+        public List<FollowBook> GetAll(int id)
+        {
+            return followService.Get(id);
         }
     }
 }

@@ -10,8 +10,8 @@ using bookAPI.Models;
 namespace bookAPI.Migrations
 {
     [DbContext(typeof(WebBookContext))]
-    [Migration("20220212113532_AddBookID_User")]
-    partial class AddBookID_User
+    [Migration("20220226010618_WebBook")]
+    partial class WebBook
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,6 +34,9 @@ namespace bookAPI.Migrations
                     b.Property<DateTime>("Create_date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Follow_sum")
+                        .HasColumnType("int");
+
                     b.Property<string>("Hoa_si")
                         .HasColumnType("nvarchar(max)");
 
@@ -55,6 +58,12 @@ namespace bookAPI.Migrations
                     b.Property<string>("Ten_khac")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Tinh_trang")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Update_date")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("View_sum")
                         .HasColumnType("int");
 
@@ -72,7 +81,7 @@ namespace bookAPI.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("ID_Chapter")
+                    b.Property<int>("ID_Chapter")
                         .HasColumnType("int");
 
                     b.Property<int?>("ID_User")
@@ -115,7 +124,7 @@ namespace bookAPI.Migrations
                     b.Property<DateTime>("Create_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ID_Book")
+                    b.Property<int>("ID_Volume")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -129,7 +138,7 @@ namespace bookAPI.Migrations
 
                     b.HasKey("ID_Chapter");
 
-                    b.HasIndex("ID_Book");
+                    b.HasIndex("ID_Volume");
 
                     b.ToTable("Chapters");
                 });
@@ -163,7 +172,7 @@ namespace bookAPI.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("ID_Book")
+                    b.Property<int>("ID_Book")
                         .HasColumnType("int");
 
                     b.Property<int?>("ID_User")
@@ -188,7 +197,7 @@ namespace bookAPI.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("ID_Book")
+                    b.Property<int>("ID_Book")
                         .HasColumnType("int");
 
                     b.Property<int?>("ID_User")
@@ -203,6 +212,31 @@ namespace bookAPI.Migrations
                     b.ToTable("Follows");
                 });
 
+            modelBuilder.Entity("bookAPI.Models.IsBan", b =>
+                {
+                    b.Property<int>("ID_IsBan")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("ID_Comment")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ID_User")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID_IsBan");
+
+                    b.HasIndex("ID_Comment");
+
+                    b.HasIndex("ID_User");
+
+                    b.ToTable("IsBans");
+                });
+
             modelBuilder.Entity("bookAPI.Models.Rating", b =>
                 {
                     b.Property<int>("ID_Rating")
@@ -210,7 +244,7 @@ namespace bookAPI.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("ID_Book")
+                    b.Property<int>("ID_Book")
                         .HasColumnType("int");
 
                     b.Property<int?>("ID_User")
@@ -265,6 +299,29 @@ namespace bookAPI.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("bookAPI.Models.Volume", b =>
+                {
+                    b.Property<int>("ID_Volume")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("ID_Book")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID_Volume");
+
+                    b.HasIndex("ID_Book");
+
+                    b.ToTable("Volumes");
+                });
+
             modelBuilder.Entity("bookAPI.Models.Book", b =>
                 {
                     b.HasOne("bookAPI.Models.User", "userid")
@@ -280,7 +337,9 @@ namespace bookAPI.Migrations
                 {
                     b.HasOne("bookAPI.Models.Chapter", "Chapter")
                         .WithMany()
-                        .HasForeignKey("ID_Chapter");
+                        .HasForeignKey("ID_Chapter")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("bookAPI.Models.User", "User")
                         .WithMany()
@@ -293,11 +352,13 @@ namespace bookAPI.Migrations
 
             modelBuilder.Entity("bookAPI.Models.Chapter", b =>
                 {
-                    b.HasOne("bookAPI.Models.Book", "Book")
+                    b.HasOne("bookAPI.Models.Volume", "Volume")
                         .WithMany()
-                        .HasForeignKey("ID_Book");
+                        .HasForeignKey("ID_Volume")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Book");
+                    b.Navigation("Volume");
                 });
 
             modelBuilder.Entity("bookAPI.Models.ChitietCategory", b =>
@@ -321,14 +382,27 @@ namespace bookAPI.Migrations
 
             modelBuilder.Entity("bookAPI.Models.Comment", b =>
                 {
+                    b.HasOne("bookAPI.Models.Book", "book")
+                        .WithMany()
+                        .HasForeignKey("ID_Book")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("bookAPI.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("ID_User");
+
+                    b.Navigation("book");
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("bookAPI.Models.Follow", b =>
+                {
                     b.HasOne("bookAPI.Models.Book", "Book")
                         .WithMany()
-                        .HasForeignKey("ID_Book");
-
-                    b.HasOne("bookAPI.Models.Comment", "Comments")
-                        .WithMany()
-                        .HasForeignKey("ID_Comment")
-                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .HasForeignKey("ID_Book")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("bookAPI.Models.User", "User")
@@ -337,31 +411,33 @@ namespace bookAPI.Migrations
 
                     b.Navigation("Book");
 
-                    b.Navigation("Comments");
-
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("bookAPI.Models.Follow", b =>
+            modelBuilder.Entity("bookAPI.Models.IsBan", b =>
                 {
-                    b.HasOne("bookAPI.Models.Book", "Book")
+                    b.HasOne("bookAPI.Models.Comment", "comment")
                         .WithMany()
-                        .HasForeignKey("ID_Book");
+                        .HasForeignKey("ID_Comment")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("bookAPI.Models.User", "User")
+                    b.HasOne("bookAPI.Models.User", "user")
                         .WithMany()
                         .HasForeignKey("ID_User");
 
-                    b.Navigation("Book");
+                    b.Navigation("comment");
 
-                    b.Navigation("User");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("bookAPI.Models.Rating", b =>
                 {
                     b.HasOne("bookAPI.Models.Book", "Book")
                         .WithMany()
-                        .HasForeignKey("ID_Book");
+                        .HasForeignKey("ID_Book")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("bookAPI.Models.User", "User")
                         .WithMany()
@@ -370,6 +446,17 @@ namespace bookAPI.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("bookAPI.Models.Volume", b =>
+                {
+                    b.HasOne("bookAPI.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("ID_Book")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
                 });
 
             modelBuilder.Entity("bookAPI.Models.Book", b =>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using bookAPI.Service;
+using bookAPI.Models;
 
 namespace Namespace
 {
@@ -10,31 +12,29 @@ namespace Namespace
     [ApiController]
     public class CommentController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+
+        public readonly CommentService commentService;
+
+        public CommentController() {
+            commentService = new CommentService();
+        }
+        [HttpPost("commentofbook")]
+        public CommentData GetAllCommentOfBook(CommentDataRecive comment)
         {
-            return new string[] { "value1", "value2" };
+            return commentService.GetCommentofBook(comment);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public CommentData Post(Comment comment)
         {
-        }
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+            return commentService.Post(comment);
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public CommentData Delete(int id)
         {
+            return commentService.Delete(id);
         }
     }
 }
