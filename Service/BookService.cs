@@ -234,10 +234,15 @@ namespace bookAPI.Service
         public AllBookPage GetByAuthorOrCategory(BookDataRecive book) {
             Category category = dbContext.Categories.FirstOrDefault(e => e.Name == book.namedata);
             List<Book> books = new List<Book>();
-            List<ChitietCategory> chitietCategories = dbContext.ChitietCategories.Where(e => e.ID_Category == category.ID_Category).ToList();
-             foreach(ChitietCategory item in chitietCategories) {
-                Book book1 = dbContext.Books.Find(item.ID_Book);
-                books.Add(book1);
+            if (book.namedata != "") {
+                List<ChitietCategory> chitietCategories = dbContext.ChitietCategories.Where(e => e.ID_Category == category.ID_Category).ToList();
+                foreach(ChitietCategory item in chitietCategories) {
+                    Book book1 = dbContext.Books.Find(item.ID_Book);
+                    books.Add(book1);
+                }
+            }
+            else {
+                books = dbContext.Books.ToList();
             }
             Book[] arraybook = books.ToArray();
             double h = ((double)books.Count)/10;
@@ -248,15 +253,41 @@ namespace bookAPI.Service
 
             all.book = new List<BookFind>();
             int count = book.page - 1;
-
+            List<BookFind> bookFinds = new List<BookFind>();
             for(int i = 0; i < 10; i++) {
                 if (count * 10 + i > (books.Count - 1)) break;
                 BookFind bookfind = new BookFind {
                     ID_Book = arraybook[count * 10 + i].ID_Book,
                     Image = arraybook[count * 10 + i].Image,
                     Name = arraybook[count * 10 + i].Name,
+                    status = arraybook[count * 10 + i].Tinh_trang,
                 };
-                all.book.Add(bookfind);
+                bookFinds.Add(bookfind);
+            }
+
+            List<BookFind> bookFinds1 = new List<BookFind>();
+            if(book.status != "") {
+                foreach (BookFind item in bookFinds) {
+                    if (item.status == bool.Parse(book.status)) {
+                        bookFinds1.Add(item);
+                    }
+                }
+            }
+            else {
+                bookFinds1 = bookFinds;
+            }
+            if (book.firstletter != "") {
+                foreach(BookFind item in bookFinds1) {
+                    string first = item.Name[0].ToString();
+                    if (first.ToLower() == book.firstletter.ToLower()) {
+                        all.book.Add(item);
+                    }
+                }
+            }
+            else {
+                foreach(BookFind item in bookFinds1) {
+                        all.book.Add(item);
+                }
             }
             return all;
 

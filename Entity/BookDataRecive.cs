@@ -8,6 +8,8 @@ namespace bookAPI.Models
         public int page {get;set;}
         public string namedata {get; set;}
         public string status {get; set;}
+
+        public string firstletter {get; set;}
         
     }
 }
