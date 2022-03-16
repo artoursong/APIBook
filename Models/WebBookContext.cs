@@ -25,7 +25,7 @@ namespace bookAPI.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-RVJ2OET;Database=WebBook;Trusted_Connection=True");
+                optionsBuilder.UseSqlServer(@"Server=tcp:webbookservic.database.windows.net,1433;Initial Catalog=WebBook;Persist Security Info=False;User ID=duypham;Password=tinhanhem1@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 

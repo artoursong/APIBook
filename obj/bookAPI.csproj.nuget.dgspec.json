@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\API\\bookAPI\\bookAPI.csproj": {}
+    "d:\\API\\bookAPI\\bookAPI.csproj": {}
   },
   "projects": {
-    "D:\\API\\bookAPI\\bookAPI.csproj": {
+    "d:\\API\\bookAPI\\bookAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\API\\bookAPI\\bookAPI.csproj",
+        "projectUniqueName": "d:\\API\\bookAPI\\bookAPI.csproj",
         "projectName": "bookAPI",
-        "projectPath": "D:\\API\\bookAPI\\bookAPI.csproj",
+        "projectPath": "d:\\API\\bookAPI\\bookAPI.csproj",
         "packagesPath": "C:\\Users\\OS\\.nuget\\packages\\",
-        "outputPath": "D:\\API\\bookAPI\\obj\\",
+        "outputPath": "d:\\API\\bookAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\OS\\AppData\\Roaming\\NuGet\\NuGet.Config",
