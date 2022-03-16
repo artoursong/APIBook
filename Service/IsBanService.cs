@@ -109,6 +109,7 @@ namespace bookAPI.Service
                     ID_User = item.ID_User,
                     Username = itemuser.Username,
                     Comment_Text = itemcomment.Text,
+                    ID_Comment = itemcomment.ID_Comment,
                 };
                 bandata.Add(data);
             }

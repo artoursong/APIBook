@@ -22,8 +22,14 @@ namespace bookAPI.Service
             List<int> id = new List<int>();
             foreach(Follow item in follows) {
                 Book book = dbContext.Books.Find(item.ID_Book);
-                Volume volume = dbContext.Volumes.Where(e => e.ID_Book == book.ID_Book).OrderByDescending(e => e.ID_Volume).ToList().Last();
-                Chapter chapter = dbContext.Chapters.Where(e => e.ID_Volume == volume.ID_Volume).OrderByDescending(e => e.ID_Chapter).ToList().Last();
+                Volume volume = new Volume();
+                Chapter chapter = new Chapter();
+                if(dbContext.Volumes.Where(e => e.ID_Book == book.ID_Book).ToList().Count > 0) {
+                    volume = dbContext.Volumes.Where(e => e.ID_Book == book.ID_Book).OrderByDescending(e => e.ID_Volume).ToList().Last();
+                    chapter = dbContext.Chapters.Where(e => e.ID_Volume == volume.ID_Volume).OrderByDescending(e => e.ID_Chapter).ToList().Last();
+                }
+
+                
                 FollowBook followBook = new FollowBook {
                     ID_Book = book.ID_Book,
                     Image = book.Image,
@@ -45,8 +51,12 @@ namespace bookAPI.Service
             List<FollowBook> listbook = new List<FollowBook>();
             foreach(Follow item in follows) {
                 Book book = dbContext.Books.Find(item.ID_Book);
-                Volume volume = dbContext.Volumes.Where(e => e.ID_Book == book.ID_Book).OrderByDescending(e => e.ID_Volume).ToList().Last();
-                Chapter chapter = dbContext.Chapters.Where(e => e.ID_Volume == volume.ID_Volume).OrderByDescending(e => e.ID_Chapter).ToList().Last();
+                Volume volume = new Volume();
+                Chapter chapter = new Chapter();
+                if(dbContext.Volumes.Where(e => e.ID_Book == book.ID_Book).ToList().Count > 0) {
+                    volume = dbContext.Volumes.Where(e => e.ID_Book == book.ID_Book).OrderByDescending(e => e.ID_Volume).ToList().Last();
+                    chapter = dbContext.Chapters.Where(e => e.ID_Volume == volume.ID_Volume).OrderByDescending(e => e.ID_Chapter).ToList().Last();
+                }
                 FollowBook followBook = new FollowBook {
                     ID_Book = book.ID_Book,
                     Image = book.Image,

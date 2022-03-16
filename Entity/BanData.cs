@@ -9,5 +9,6 @@ namespace bookAPI.Models
         public int? ID_User {get; set;}
         public string Username {get; set;}
         public string Comment_Text {get; set;}
+        public int ID_Comment {get; set;}
     }
 }
