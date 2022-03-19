@@ -223,7 +223,8 @@ namespace bookAPI.Service
                     ID_Book = item.ID_Book,
                     Name = item.Name,
                     Image = item.Image,
-                    Mo_ta = item.Mo_ta
+                    Mo_ta = item.Mo_ta,
+                    Follow_sum = item.Follow_sum,
                 };
                 top10.Add(bookdata);
             }

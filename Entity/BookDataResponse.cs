@@ -9,6 +9,7 @@ namespace bookAPI.Models
 {
     public class BookDataResponse
     {
+        public int ID_Book {get; set;}
         public string Name {get; set;}
         public string Mo_ta{get; set;}
         public string Author {get; set;}
